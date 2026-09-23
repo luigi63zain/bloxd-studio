@@ -22,7 +22,7 @@ function ShareDialog({ kind, defaultTitle, data, code, onClose }: Props & { onCl
   const [busy, setBusy] = useState(false);
 
   const submit = async () => {
-    if (!title.trim()) return toast.error("Give it a name");
+    if (!title.trim()) { toast.error("Give it a name"); return; }
     setBusy(true);
     localStorage.setItem("bloxdstudio-author", author);
     const { error } = await supabase.from("forge_posts").insert({
@@ -30,7 +30,7 @@ function ShareDialog({ kind, defaultTitle, data, code, onClose }: Props & { onCl
       description: description.trim().slice(0, 500), data: data as Json, code,
     });
     setBusy(false);
-    if (error) return toast.error("Couldn't share it, try again");
+    if (error) { toast.error("Could not share it, try again"); return; }
     toast.success("Shared to the Forge!");
     onClose();
   };

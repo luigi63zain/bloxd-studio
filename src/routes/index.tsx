@@ -28,8 +28,12 @@ function Hub() {
         </section>
 
         <section className="glass mt-8 rounded-2xl p-8 text-center">
-          <h2 className="font-display text-2xl font-extrabold">No shared builds yet</h2>
-          <p className="mt-2 text-sm text-steel">Make something in the editor, export it, and send the file to your friends.</p>
+          <h2 className="font-display text-2xl font-extrabold">See what builders are sharing</h2>
+          <p className="mt-2 text-sm text-steel">Codes and schematics from the community live in the Forge.</p>
+          <div className="mt-5 flex justify-center gap-2">
+            <Link to="/forge" className="btn-voxel rounded-xl px-5 py-3 text-sm">Visit the Forge</Link>
+            <Link to="/schematic" className="btn-ghost rounded-xl px-5 py-3 text-sm">Build a schematic</Link>
+          </div>
         </section>
       </div>
     </div>
