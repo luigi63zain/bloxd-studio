@@ -14,7 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      forge_posts: {
+        Row: {
+          author: string
+          code: string
+          created_at: string
+          data: Json
+          description: string
+          id: string
+          kind: string
+          title: string
+        }
+        Insert: {
+          author?: string
+          code?: string
+          created_at?: string
+          data: Json
+          description?: string
+          id?: string
+          kind: string
+          title: string
+        }
+        Update: {
+          author?: string
+          code?: string
+          created_at?: string
+          data?: Json
+          description?: string
+          id?: string
+          kind?: string
+          title?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
