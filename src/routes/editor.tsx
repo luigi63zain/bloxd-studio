@@ -32,20 +32,33 @@ function mapTree(nodes: Node[], fn: (n: Node) => Node | null): Node[] {
     return [{ ...r, children: r.children ? mapTree(r.children, fn) : undefined }];
   });
 }
-function insertInto(nodes: Node[], targetId: string | null, node: Node): Node[] {
-  if (!targetId) return [...nodes, node];
-  return mapTree(nodes, (n) => (n.id === targetId && n.children ? { ...n, children: [...n.children, node] } : n));
-}
-function move(nodes: Node[], id: string, dir: -1 | 1): Node[] {
-  const i = nodes.findIndex((n) => n.id === id);
-  if (i >= 0) {
-    const j = i + dir;
-    if (j < 0 || j >= nodes.length) return nodes;
-    const c = [...nodes];
-    const t = c[i]!; c[i] = c[j]!; c[j] = t;
-    return c;
+function find(nodes: Node[], id: string): Node | null {
+  for (const n of nodes) {
+    if (n.id === id) return n;
+    const r = n.children && find(n.children, id);
+    if (r) return r;
   }
-  return nodes.map((n) => (n.children ? { ...n, children: move(n.children, id, dir) } : n));
+  return null;
+}
+function locate(nodes: Node[], id: string, parent: string | null): { parent: string | null; index: number } | null {
+  for (let i = 0; i < nodes.length; i++) {
+    const n = nodes[i]!;
+    if (n.id === id) return { parent, index: i };
+    const r = n.children && locate(n.children, id, n.id);
+    if (r) return r;
+  }
+  return null;
+}
+function extract(nodes: Node[], id: string): [Node[], Node | null] {
+  const found = find(nodes, id);
+  return [mapTree(nodes, (n) => (n.id === id ? null : n)), found];
+}
+function insertAt(nodes: Node[], parentId: string | null, index: number, node: Node): Node[] {
+  if (!parentId) { const c = [...nodes]; c.splice(index, 0, node); return c; }
+  return nodes.map((n) => {
+    if (n.id === parentId && n.children) { const c = [...n.children]; c.splice(index, 0, node); return { ...n, children: c }; }
+    return n.children ? { ...n, children: insertAt(n.children, parentId, index, node) } : n;
+  });
 }
 const count = (ns: Node[]): number => ns.reduce((a, n) => a + 1 + (n.children ? count(n.children) : 0), 0);
 
@@ -53,7 +66,7 @@ function Editor() {
   const [name, setName] = useState("my_build");
   const [scripts, setScripts] = useState<Node[]>(starter);
   const [cat, setCat] = useState<Category>("event");
-  const [target, setTarget] = useState<string | null>(null);
+  const [over, setOver] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -67,16 +80,29 @@ function Editor() {
 
   const code = useMemo(() => generate(scripts), [scripts]);
 
-  const add = (type: string) => {
-    const node = makeNode(type);
-    if (DEF[type]?.shape === "hat") { setScripts((s) => [...s, node]); setTarget(node.id); return; }
-    const t = target ?? scripts.find((s) => s.children)?.id ?? null;
-    if (!t) { toast("Add an event block first"); return; }
-    setScripts((s) => insertInto(s, t, node));
+  const drop = (e: React.DragEvent, parentId: string | null, index: number) => {
+    e.preventDefault(); e.stopPropagation(); setOver(null);
+    const v = e.dataTransfer.getData("text/plain");
+    setScripts((s) => {
+      let tree = s, node: Node | null = null;
+      if (v.startsWith("new:")) node = makeNode(v.slice(4));
+      else if (v.startsWith("move:")) {
+        const id = v.slice(5);
+        const found = find(s, id);
+        if (!found || (parentId && (parentId === id || find(found.children ?? [], parentId)))) return s;
+        // adjust index if moving within same parent and earlier
+        const loc = locate(s, id, null);
+        if (loc && loc.parent === parentId && loc.index < index) index -= 1;
+        [tree, node] = extract(s, id);
+      }
+      if (!node) return s;
+      if (DEF[node.type]?.shape === "hat") parentId = null, index = Math.min(index, tree.length);
+      return insertAt(tree, parentId, index, node);
+    });
   };
   const update = (id: string, key: string, val: string) =>
     setScripts((s) => mapTree(s, (n) => (n.id === id ? { ...n, values: { ...n.values, [key]: val } } : n)));
-  const remove = (id: string) => { setScripts((s) => mapTree(s, (n) => (n.id === id ? null : n))); if (target === id) setTarget(null); };
+  const remove = (id: string) => setScripts((s) => mapTree(s, (n) => (n.id === id ? null : n)));
 
   const copy = async () => {
     await navigator.clipboard.writeText(code);
@@ -136,24 +162,34 @@ function Editor() {
                   </button>
                 ))}
               </div>
-              <p className="mt-3 text-[10px] uppercase tracking-[0.18em] text-steel">Click a block to add it</p>
+              <p className="mt-3 text-[10px] uppercase tracking-[0.18em] text-steel">Drag blocks onto the canvas</p>
               <div className="mt-3 flex flex-col gap-3" style={{ ["--notch-bg" as string]: "var(--ink)" }}>
                 {BLOCKS.filter((b) => b.category === cat).map((b) => (
-                  <button key={b.type} onClick={() => add(b.type)}
-                    className={`pblock b-${b.category} ${b.shape === "hat" ? "hat" : ""} text-left transition-transform hover:-translate-y-0.5`}>
+                  <div key={b.type} draggable
+                    onDragStart={(e) => { e.dataTransfer.setData("text/plain", `new:${b.type}`); e.dataTransfer.effectAllowed = "copy"; }}
+                    className={`pblock b-${b.category} ${b.shape === "hat" ? "hat" : ""} cursor-grab transition-transform hover:-translate-y-0.5 active:cursor-grabbing`}>
                     {b.parts.map((p, i) => typeof p === "string" ? <span key={i}>{p}</span> :
                       <span key={i} className="rounded-full bg-foreground/90 px-2 text-[11px]">{p.default}</span>)}
-                  </button>
+                  </div>
                 ))}
+              </div>
+              <div
+                onDragOver={(e) => { e.preventDefault(); setOver("trash"); }}
+                onDragLeave={() => setOver(null)}
+                onDrop={(e) => { e.preventDefault(); setOver(null); const v = e.dataTransfer.getData("text/plain"); if (v.startsWith("move:")) remove(v.slice(5)); }}
+                className={`mt-4 rounded-lg border border-dashed p-3 text-center text-[11px] ${over === "trash" ? "border-coral bg-coral/10 text-coral" : "border-border text-steel"}`}>
+                drag here to delete
               </div>
             </div>
 
             {/* Canvas */}
-            <div className="min-h-[520px] overflow-auto rounded-xl bg-ink/80 p-5 ring-1 ring-inset ring-border"
-              style={{ ["--notch-bg" as string]: "var(--ink)" }}>
-              {scripts.length === 0 && <p className="text-sm text-steel">Start with an event block from the palette.</p>}
+            <div className={`min-h-[520px] overflow-auto rounded-xl bg-ink/80 p-5 ring-1 ring-inset ${over === "root" ? "ring-bright/50" : "ring-border"}`}
+              style={{ ["--notch-bg" as string]: "var(--ink)" }}
+              onDragOver={(e) => { e.preventDefault(); if (over !== "root" && e.target === e.currentTarget) setOver("root"); }}
+              onDrop={(e) => drop(e, null, scripts.length)}>
+              {scripts.length === 0 && <p className="pointer-events-none text-sm text-steel">Drag an event block here to start.</p>}
               <div className="flex flex-col gap-8">
-                {scripts.map((s) => <BlockView key={s.id} node={s} target={target} setTarget={setTarget} update={update} remove={remove} move={(id, d) => setScripts((x) => move(x, id, d))} />)}
+                {scripts.map((s, i) => <BlockView key={s.id} node={s} parentId={null} index={i} over={over} setOver={setOver} update={update} remove={remove} drop={drop} />)}
               </div>
             </div>
 
@@ -174,50 +210,63 @@ function Editor() {
 }
 
 type ViewProps = {
-  node: Node; target: string | null; setTarget: (id: string) => void;
-  update: (id: string, k: string, v: string) => void; remove: (id: string) => void; move: (id: string, d: -1 | 1) => void;
+  node: Node; parentId: string | null; index: number; over: string | null; setOver: (k: string | null) => void;
+  update: (id: string, k: string, v: string) => void; remove: (id: string) => void;
+  drop: (e: React.DragEvent, parentId: string | null, index: number) => void;
 };
 
-function BlockView({ node, target, setTarget, update, remove, move }: ViewProps) {
+function BlockView({ node, parentId, index, over, setOver, update, remove, drop }: ViewProps) {
   const d = DEF[node.type];
   if (!d) return null;
-  const selected = target === node.id;
+  const afterKey = `after:${node.id}`;
   const head = (
-    <div className={`pblock group b-${d.category} ${d.shape === "hat" ? "hat" : ""} ${selected ? "outline-2 outline-offset-2 outline-bright" : ""}`}
-      onClick={(e) => { if (node.children) { e.stopPropagation(); setTarget(node.id); } }}>
+    <div draggable
+      onDragStart={(e) => { e.stopPropagation(); e.dataTransfer.setData("text/plain", `move:${node.id}`); e.dataTransfer.effectAllowed = "move"; }}
+      onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); setOver(afterKey); }}
+      onDragLeave={() => setOver(null)}
+      onDrop={(e) => drop(e, node.children && d.shape !== "hat" ? parentId : parentId, index + 1)}
+      className={`pblock group cursor-grab active:cursor-grabbing b-${d.category} ${d.shape === "hat" ? "hat" : ""}`}>
       {d.parts.map((p, i) => typeof p === "string" ? <span key={i}>{p}</span> : (
         <input key={i} value={node.values[p.key] ?? ""} type={p.kind === "number" ? "number" : "text"}
-          onClick={(e) => e.stopPropagation()}
+          draggable={false} onDragStart={(e) => e.preventDefault()}
           onChange={(e) => update(node.id, p.key, e.target.value)}
           style={{ width: `${Math.max(3, (node.values[p.key] ?? "").length + 2)}ch` }} />
       ))}
-      <span className="ml-1 flex gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
-        {d.shape !== "hat" && <>
-          <button aria-label="Move up" onClick={(e) => { e.stopPropagation(); move(node.id, -1); }} className="rounded px-1 hover:bg-ink/20">↑</button>
-          <button aria-label="Move down" onClick={(e) => { e.stopPropagation(); move(node.id, 1); }} className="rounded px-1 hover:bg-ink/20">↓</button>
-        </>}
-        <button aria-label="Delete" onClick={(e) => { e.stopPropagation(); remove(node.id); }} className="rounded px-1 hover:bg-ink/20">✕</button>
-      </span>
+      <button aria-label="Delete" onClick={() => remove(node.id)} className="ml-1 rounded px-1 opacity-0 transition-opacity hover:bg-ink/20 group-hover:opacity-100">✕</button>
     </div>
   );
-  if (!node.children) return head;
+  const indicator = over === afterKey && d.shape !== "hat" ? <div className="h-1 w-44 rounded bg-bright" /> : null;
+  if (!node.children) return <div className="flex flex-col gap-1.5">{head}{indicator}</div>;
+  const zoneKey = `in:${node.id}`;
   const kids = (
-    <div className="flex flex-col gap-1.5 py-1.5" style={{ ["--notch-bg" as string]: `var(--${catVar(d.category)})` }}>
-      {node.children.length === 0 && <div className="h-6 text-[10px] leading-6 text-steel" style={{ paddingLeft: 4 }}>{selected ? "adding blocks here" : "click to add blocks here"}</div>}
-      <div className="flex flex-col gap-1.5" style={{ ["--notch-bg" as string]: "var(--ink)" }}>
-        {node.children.map((c) => <BlockView key={c.id} node={c} target={target} setTarget={setTarget} update={update} remove={remove} move={move} />)}
+    <div className="flex flex-col gap-1.5 py-1.5" style={{ ["--notch-bg" as string]: "var(--ink)" }}>
+      {node.children.map((c, i) => <BlockView key={c.id} node={c} parentId={node.id} index={i} over={over} setOver={setOver} update={update} remove={remove} drop={drop} />)}
+      <div
+        onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); setOver(zoneKey); }}
+        onDragLeave={() => setOver(null)}
+        onDrop={(e) => drop(e, node.id, node.children!.length)}
+        className={`h-7 w-44 rounded-md border border-dashed text-[10px] leading-7 transition-colors ${over === zoneKey ? "border-bright bg-bright/10 text-bright" : "border-border text-steel"}`}
+        style={{ paddingLeft: 8 }}>
+        drop blocks here
       </div>
     </div>
   );
-  if (d.shape === "hat") return <div className="flex flex-col gap-1.5">{head}<div className="pl-0">{kids}</div></div>;
+  // dropping directly on a hat/C header puts the block first inside it
+  const headWithInner = (
+    <div onDropCapture={(e) => { if (e.target === e.currentTarget.firstChild || (e.currentTarget.firstChild as HTMLElement)?.contains(e.target as HTMLElement)) { drop(e, node.id, 0); } }}>
+      {head}
+    </div>
+  );
+  if (d.shape === "hat") return <div className="flex flex-col gap-1.5">{headWithInner}{kids}</div>;
   return (
     <div className="flex flex-col">
-      {head}
+      {headWithInner}
       <div className="flex">
         <div className={`c-arm b-${d.category}`} />
         <div className="pl-1">{kids}</div>
       </div>
       <div className={`c-foot b-${d.category}`} />
+      {indicator && <div className="mt-1.5">{indicator}</div>}
     </div>
   );
 }
