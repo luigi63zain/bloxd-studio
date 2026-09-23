@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Glows, SiteHeader } from "@/components/SiteHeader";
+import { ShareButton } from "@/components/ShareDialog";
 import { BLOCKS, CATEGORIES, DEF, generate, makeNode, type Category, type Node } from "@/lib/blocks";
 
 export const Route = createFileRoute("/editor")({
@@ -147,6 +148,7 @@ function Editor() {
               <input ref={fileRef} type="file" accept=".bxs,.json" hidden onChange={(e) => importFile(e.target.files?.[0])} />
               <button onClick={() => fileRef.current?.click()} className="btn-ghost rounded-lg px-3 py-2 text-xs">Import file</button>
               <button onClick={exportFile} className="btn-ghost rounded-lg px-3 py-2 text-xs">Export file</button>
+              <ShareButton kind="code" defaultTitle={name} data={{ app: "BloxdStudio", version: 1, name, scripts }} code={code} />
               <button onClick={() => { setScripts([]); }} className="btn-ghost rounded-lg px-3 py-2 text-xs text-coral">Clear</button>
             </div>
           </div>
