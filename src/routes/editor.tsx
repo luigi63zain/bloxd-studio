@@ -42,7 +42,7 @@ function move(nodes: Node[], id: string, dir: -1 | 1): Node[] {
     const j = i + dir;
     if (j < 0 || j >= nodes.length) return nodes;
     const c = [...nodes];
-    [c[i], c[j]] = [c[j], c[i]];
+    const t = c[i]!; c[i] = c[j]!; c[j] = t;
     return c;
   }
   return nodes.map((n) => (n.children ? { ...n, children: move(n.children, id, dir) } : n));
@@ -69,7 +69,7 @@ function Editor() {
 
   const add = (type: string) => {
     const node = makeNode(type);
-    if (DEF[type].shape === "hat") { setScripts((s) => [...s, node]); setTarget(node.id); return; }
+    if (DEF[type]?.shape === "hat") { setScripts((s) => [...s, node]); setTarget(node.id); return; }
     const t = target ?? scripts.find((s) => s.children)?.id ?? null;
     if (!t) { toast("Add an event block first"); return; }
     setScripts((s) => insertInto(s, t, node));

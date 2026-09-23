@@ -7,11 +7,11 @@ export type BlockDef = {
   category: Category;
   shape: "hat" | "stack" | "c";
   parts: (string | Field)[];
-  gen: (v: Record<string, string>, inner: string) => string;
+  gen: (v: any, inner: string) => string;
 };
 
-const q = (s: string) => JSON.stringify(s ?? "");
-const n = (s: string) => (s && !isNaN(Number(s)) ? String(Number(s)) : s || "0");
+const q = (s?: string) => JSON.stringify(s ?? "");
+const n = (s?: string) => (s && !isNaN(Number(s)) ? String(Number(s)) : s || "0");
 
 export const BLOCKS: BlockDef[] = [
   { type: "onJoin", category: "event", shape: "hat", parts: ["when player joins"],
@@ -64,12 +64,12 @@ export const BLOCKS: BlockDef[] = [
 export const DEF = Object.fromEntries(BLOCKS.map((b) => [b.type, b]));
 export const CATEGORIES: Category[] = ["event", "world", "player", "logic", "math"];
 
-export type Node = { id: string; type: string; values: Record<string, string>; children?: Node[] };
+export type Node = { id: string; type: string; values: Record<string, string>; children?: Node[] | undefined };
 
 export const uid = () => Math.random().toString(36).slice(2, 9);
 
 export function makeNode(type: string): Node {
-  const d = DEF[type];
+  const d = DEF[type]!;
   const values: Record<string, string> = {};
   d.parts.forEach((p) => typeof p !== "string" && (values[p.key] = p.default));
   return { id: uid(), type, values, children: d.shape === "stack" ? undefined : [] };
