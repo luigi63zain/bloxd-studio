@@ -122,7 +122,7 @@ function Editor() {
     try {
       const p = JSON.parse(await f.text());
       if (!Array.isArray(p.scripts)) throw new Error();
-      setName(p.name || "imported"); setScripts(p.scripts); setTarget(null);
+      setName(p.name || "imported"); setScripts(p.scripts);
       toast.success(`Imported ${p.name}`);
     } catch { toast.error("That file isn't a BloxdStudio project"); }
     if (fileRef.current) fileRef.current.value = "";
@@ -147,7 +147,7 @@ function Editor() {
               <input ref={fileRef} type="file" accept=".bxs,.json" hidden onChange={(e) => importFile(e.target.files?.[0])} />
               <button onClick={() => fileRef.current?.click()} className="btn-ghost rounded-lg px-3 py-2 text-xs">Import file</button>
               <button onClick={exportFile} className="btn-ghost rounded-lg px-3 py-2 text-xs">Export file</button>
-              <button onClick={() => { setScripts([]); setTarget(null); }} className="btn-ghost rounded-lg px-3 py-2 text-xs text-coral">Clear</button>
+              <button onClick={() => { setScripts([]); }} className="btn-ghost rounded-lg px-3 py-2 text-xs text-coral">Clear</button>
             </div>
           </div>
 
