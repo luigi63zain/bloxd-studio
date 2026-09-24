@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EditorRouteImport } from './routes/editor'
 import { Route as ForgeRouteImport } from './routes/forge'
+import { Route as RoadsRouteImport } from './routes/roads'
 import { Route as SchematicRouteImport } from './routes/schematic'
 
 const IndexRoute = IndexRouteImport.update({
@@ -29,6 +30,11 @@ const ForgeRoute = ForgeRouteImport.update({
   path: '/forge',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RoadsRoute = RoadsRouteImport.update({
+  id: '/roads',
+  path: '/roads',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SchematicRoute = SchematicRouteImport.update({
   id: '/schematic',
   path: '/schematic',
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/editor': typeof EditorRoute
   '/forge': typeof ForgeRoute
+  '/roads': typeof RoadsRoute
   '/schematic': typeof SchematicRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/editor': typeof EditorRoute
   '/forge': typeof ForgeRoute
+  '/roads': typeof RoadsRoute
   '/schematic': typeof SchematicRoute
 }
 export interface FileRoutesById {
@@ -52,20 +60,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/editor': typeof EditorRoute
   '/forge': typeof ForgeRoute
+  '/roads': typeof RoadsRoute
   '/schematic': typeof SchematicRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/editor' | '/forge' | '/schematic'
+  fullPaths: '/' | '/editor' | '/forge' | '/roads' | '/schematic'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/editor' | '/forge' | '/schematic'
-  id: '__root__' | '/' | '/editor' | '/forge' | '/schematic'
+  to: '/' | '/editor' | '/forge' | '/roads' | '/schematic'
+  id: '__root__' | '/' | '/editor' | '/forge' | '/roads' | '/schematic'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   EditorRoute: typeof EditorRoute
   ForgeRoute: typeof ForgeRoute
+  RoadsRoute: typeof RoadsRoute
   SchematicRoute: typeof SchematicRoute
 }
 
@@ -92,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ForgeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/roads': {
+      id: '/roads'
+      path: '/roads'
+      fullPath: '/roads'
+      preLoaderRoute: typeof RoadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/schematic': {
       id: '/schematic'
       path: '/schematic'
@@ -106,6 +123,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   EditorRoute: EditorRoute,
   ForgeRoute: ForgeRoute,
+  RoadsRoute: RoadsRoute,
   SchematicRoute: SchematicRoute,
 }
 export const routeTree = rootRouteImport
