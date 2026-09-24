@@ -26,9 +26,9 @@ export type Voxels = Record<string, string>;
 
 export type SchemFile = { format: "bloxdschem"; version: 1; name: string; size: [number, number, number]; blocks: [number, number, number, string][] };
 
-export function toFile(name: string, v: Voxels): SchemFile {
+export function toFile(name: string, v: Voxels, size: [number, number, number] = [SIZE, HEIGHT, SIZE]): SchemFile {
   return {
-    format: "bloxdschem", version: 1, name, size: [SIZE, HEIGHT, SIZE],
+    format: "bloxdschem", version: 1, name, size,
     blocks: Object.entries(v).map(([k, b]) => { const [x, y, z] = k.split(",").map(Number); return [x!, y!, z!, b]; }),
   };
 }
