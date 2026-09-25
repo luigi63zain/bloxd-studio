@@ -8,6 +8,13 @@
       "when": 1790198375559,
       "tag": "0000_create_forge_posts",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790367412460,
+      "tag": "0001_owner_roles",
+      "breakpoints": true
     }
   ]
 }
