@@ -70,6 +70,11 @@ function Editor() {
   const [over, setOver] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const [search, setSearch] = useState("");
+  const q = search.trim().toLowerCase();
+  const shown = q
+    ? BLOCKS.filter((b) => b.parts.map((p) => (typeof p === "string" ? p : p.default)).join(" ").toLowerCase().includes(q) || b.type.toLowerCase().includes(q))
+    : BLOCKS.filter((b) => b.category === cat);
 
   useEffect(() => {
     try {
@@ -164,9 +169,12 @@ function Editor() {
                   </button>
                 ))}
               </div>
+              <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search blocks..." aria-label="Search blocks"
+                className="mt-3 w-full rounded-lg bg-ink/80 px-3 py-2 text-xs outline-none ring-1 ring-inset ring-border focus:ring-bright/50" />
               <p className="mt-3 text-[10px] uppercase tracking-[0.18em] text-steel">Drag blocks onto the canvas</p>
               <div className="mt-3 flex flex-col gap-3" style={{ ["--notch-bg" as string]: "var(--ink)" }}>
-                {BLOCKS.filter((b) => b.category === cat).map((b) => (
+                {search.trim() && shown.length === 0 && <p className="text-xs text-steel">No blocks match "{search}"</p>}
+                {shown.map((b) => (
                   <div key={b.type} draggable
                     onDragStart={(e) => { e.dataTransfer.setData("text/plain", `new:${b.type}`); e.dataTransfer.effectAllowed = "copy"; }}
                     className={`pblock b-${b.category} ${b.shape === "hat" ? "hat" : ""} cursor-grab transition-transform hover:-translate-y-0.5 active:cursor-grabbing`}>

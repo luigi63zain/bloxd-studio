@@ -1,6 +1,9 @@
 import { Link } from "@tanstack/react-router";
+import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/integrations/supabase/client";
 
 export function SiteHeader() {
+  const { user, isOwner } = useAuth();
   return (
     <header className="flex items-center justify-between gap-4">
       <Link to="/" className="flex items-center gap-3">
@@ -19,7 +22,18 @@ export function SiteHeader() {
           </Link>
         ))}
       </nav>
-      <Link to="/editor" className="btn-voxel rounded-xl px-4 py-2.5 text-sm">+ New build</Link>
+      <div className="flex items-center gap-2">
+        {user ? (
+          <>
+            <span className="text-xs text-steel">{user.email}</span>
+            {isOwner && <span className="rounded-full bg-amber/20 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-amber ring-1 ring-inset ring-amber/40">★ Owner</span>}
+            <button onClick={() => supabase.auth.signOut()} className="btn-ghost rounded-lg px-3 py-2 text-xs">Sign out</button>
+          </>
+        ) : (
+          <Link to="/auth" className="btn-ghost rounded-lg px-3 py-2 text-xs">Sign in</Link>
+        )}
+        <Link to="/editor" className="btn-voxel rounded-xl px-4 py-2.5 text-sm">+ New build</Link>
+      </div>
     </header>
   );
 }
