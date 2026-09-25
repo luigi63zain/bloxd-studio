@@ -60,7 +60,7 @@ function Roads() {
   const [name, setName] = useState("my_road");
   const [pts, setPts] = useState<P[]>([]);
   const [width, setWidth] = useState(3);
-  const [road, setRoad] = useState("Cobblestone");
+  const [road, setRoad] = useState("Messy Stone");
   const [edge, setEdge] = useState("Stone");
   const [line, setLine] = useState("White Wool");
   const [lines, setLines] = useState(true);
