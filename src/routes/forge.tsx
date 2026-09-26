@@ -67,7 +67,7 @@ function Forge() {
                   <span className="text-[11px] text-steel">{new Date(p.created_at).toLocaleDateString()}</span>
                 </div>
                 <h3 className="mt-2 font-display text-lg font-bold">{p.title}</h3>
-                <div className="text-xs text-foreground/70">by {p.author}</div>
+                <div className="text-xs text-foreground/70">by {p.author}{p.author_is_owner && <span className="ml-1.5 rounded-full bg-amber/20 px-1.5 py-0.5 text-[10px] font-bold text-amber">★ Owner</span>}</div>
                 {p.description && <p className="mt-2 line-clamp-2 text-xs text-steel">{p.description}</p>}
               </button>
             ))}

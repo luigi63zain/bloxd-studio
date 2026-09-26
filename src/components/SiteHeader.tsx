@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 
 export function SiteHeader() {
-  const { user, isOwner } = useAuth();
+  const { user, isOwner, profile } = useAuth();
   return (
     <header className="flex items-center justify-between gap-4">
       <Link to="/" className="flex items-center gap-3">
@@ -25,7 +25,7 @@ export function SiteHeader() {
       <div className="flex items-center gap-2">
         {user ? (
           <>
-            <span className="text-xs text-steel">{user.email}</span>
+            <Link to="/account" className="text-xs text-steel hover:text-bright">{profile?.username ?? user.email}</Link>
             {isOwner && <span className="rounded-full bg-amber/20 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-amber ring-1 ring-inset ring-amber/40">★ Owner</span>}
             <button onClick={() => supabase.auth.signOut()} className="btn-ghost rounded-lg px-3 py-2 text-xs">Sign out</button>
           </>
