@@ -53,6 +53,33 @@ export type Database = {
         }
         Relationships: []
       }
+      hub_posts: {
+        Row: {
+          author: string
+          author_is_owner: boolean
+          body: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          author?: string
+          author_is_owner?: boolean
+          body: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Update: {
+          author?: string
+          author_is_owner?: boolean
+          body?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -97,6 +124,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      clean_text: { Args: { _t: string }; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
