@@ -17,6 +17,7 @@ export type Database = {
       forge_posts: {
         Row: {
           author: string
+          author_is_owner: boolean
           code: string
           created_at: string
           data: Json
@@ -24,9 +25,11 @@ export type Database = {
           id: string
           kind: string
           title: string
+          user_id: string | null
         }
         Insert: {
           author?: string
+          author_is_owner?: boolean
           code?: string
           created_at?: string
           data: Json
@@ -34,9 +37,11 @@ export type Database = {
           id?: string
           kind: string
           title: string
+          user_id?: string | null
         }
         Update: {
           author?: string
+          author_is_owner?: boolean
           code?: string
           created_at?: string
           data?: Json
@@ -44,6 +49,28 @@ export type Database = {
           id?: string
           kind?: string
           title?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          user_id: string
+          username: string
+          username_changed_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          user_id: string
+          username: string
+          username_changed_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          user_id?: string
+          username?: string
+          username_changed_at?: string | null
         }
         Relationships: []
       }
@@ -77,6 +104,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      make_username: { Args: { _email: string; _uid: string }; Returns: string }
     }
     Enums: {
       app_role: "owner" | "admin" | "user"
