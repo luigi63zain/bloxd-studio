@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Glows, SiteHeader } from "@/components/SiteHeader";
+import { HubPosts } from "@/components/HubPosts";
 
 export const Route = createFileRoute("/")({
   staticData: { sitemap: true },
@@ -26,6 +27,7 @@ function Hub() {
           <h1 className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl">Snap code together.<br />Share it with everyone.</h1>
           <p className="mt-3 max-w-lg text-sm text-steel">Stack puzzle-piece blocks to make bloxd.io scripts, copy the code into your world, and trade project files with friends.</p>
           <Link to="/editor" className="btn-voxel mt-6 inline-block rounded-xl px-5 py-3 text-sm">Open the block editor</Link>
+          <Link to="/ai" className="btn-ghost ml-2 mt-6 inline-block rounded-xl px-5 py-3 text-sm">Try the AI generator</Link>
         </section>
 
         <section className="glass mt-8 rounded-2xl p-8 text-center">
@@ -36,6 +38,7 @@ function Hub() {
             <Link to="/schematic" className="btn-ghost rounded-xl px-5 py-3 text-sm">Build a schematic</Link>
           </div>
         </section>
+        <HubPosts />
       </div>
     </div>
   );

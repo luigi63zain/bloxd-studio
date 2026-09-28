@@ -14,7 +14,7 @@ export function SiteHeader() {
         </div>
       </Link>
       <nav className="flex items-center gap-1">
-        {([["/", "Hub"], ["/editor", "Code"], ["/schematic", "Schematics"], ["/roads", "Roads"], ["/forge", "Forge"]] as const).map(([to, label]) => (
+        {([["/", "Hub"], ["/editor", "Code"], ["/schematic", "Schematics"], ["/roads", "Roads"], ["/forge", "Forge"], ["/ai", "AI"]] as const).map(([to, label]) => (
           <Link key={to} to={to} activeOptions={{ exact: true }}
             className="rounded-full px-4 py-2 text-sm text-steel"
             activeProps={{ className: "bg-bright/15 !text-bright ring-1 ring-inset ring-bright/30" }}>
