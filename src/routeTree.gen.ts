@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccountRouteImport } from './routes/account'
+import { Route as AiRouteImport } from './routes/ai'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as EditorRouteImport } from './routes/editor'
 import { Route as ForgeRouteImport } from './routes/forge'
@@ -26,6 +27,11 @@ const IndexRoute = IndexRouteImport.update({
 const AccountRoute = AccountRouteImport.update({
   id: '/account',
   path: '/account',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiRoute = AiRouteImport.update({
+  id: '/ai',
+  path: '/ai',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -62,6 +68,7 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
+  '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
   '/editor': typeof EditorRoute
   '/forge': typeof ForgeRoute
@@ -72,6 +79,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
+  '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
   '/editor': typeof EditorRoute
   '/forge': typeof ForgeRoute
@@ -83,6 +91,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
+  '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
   '/editor': typeof EditorRoute
   '/forge': typeof ForgeRoute
@@ -95,6 +104,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/account'
+    | '/ai'
     | '/auth'
     | '/editor'
     | '/forge'
@@ -105,6 +115,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/account'
+    | '/ai'
     | '/auth'
     | '/editor'
     | '/forge'
@@ -115,6 +126,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/account'
+    | '/ai'
     | '/auth'
     | '/editor'
     | '/forge'
@@ -126,6 +138,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccountRoute: typeof AccountRoute
+  AiRoute: typeof AiRoute
   AuthRoute: typeof AuthRoute
   EditorRoute: typeof EditorRoute
   ForgeRoute: typeof ForgeRoute
@@ -148,6 +161,13 @@ declare module '@tanstack/react-router' {
       path: '/account'
       fullPath: '/account'
       preLoaderRoute: typeof AccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai': {
+      id: '/ai'
+      path: '/ai'
+      fullPath: '/ai'
+      preLoaderRoute: typeof AiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -198,6 +218,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountRoute: AccountRoute,
+  AiRoute: AiRoute,
   AuthRoute: AuthRoute,
   EditorRoute: EditorRoute,
   ForgeRoute: ForgeRoute,
