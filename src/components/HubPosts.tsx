@@ -23,13 +23,13 @@ export function HubPosts() {
     setBusy(true);
     const { error } = await supabase.from("hub_posts").insert({ body: body.trim(), user_id: user.id, author: "" });
     setBusy(false);
-    if (error) return toast.error("Couldn't post: " + error.message);
+    if (error) { toast.error("Couldn't post: " + error.message); return; }
     setBody(""); void load();
   };
 
   const del = async (id: string) => {
     const { error } = await supabase.from("hub_posts").delete().eq("id", id);
-    if (error) return toast.error("Couldn't delete");
+    if (error) { toast.error("Couldn't delete"); return; }
     setPosts((p) => p.filter((x) => x.id !== id));
   };
 
