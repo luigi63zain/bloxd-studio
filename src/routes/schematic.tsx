@@ -6,6 +6,7 @@ import { ShareButton } from "@/components/ShareDialog";
 import { COLOR, HEIGHT, PALETTE, SIZE, fromFile, schemCode, toFile, type SchemFile, type Voxels } from "@/lib/schem";
 
 export const Route = createFileRoute("/schematic")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "Schematic Builder — BloxdStudio" },

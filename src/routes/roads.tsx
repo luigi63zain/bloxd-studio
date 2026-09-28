@@ -6,6 +6,7 @@ import { ShareButton } from "@/components/ShareDialog";
 import { COLOR, PALETTE, schemCode, toFile, type Voxels } from "@/lib/schem";
 
 export const Route = createFileRoute("/roads")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "Road Generator — BloxdStudio" },

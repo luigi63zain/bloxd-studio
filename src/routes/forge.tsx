@@ -8,6 +8,7 @@ import type { Tables } from "@/integrations/supabase/types";
 import { fromFile, type SchemFile } from "@/lib/schem";
 
 export const Route = createFileRoute("/forge")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "The Forge — BloxdStudio" },
