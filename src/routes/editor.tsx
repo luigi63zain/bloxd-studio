@@ -6,6 +6,7 @@ import { ShareButton } from "@/components/ShareDialog";
 import { BLOCKS, CATEGORIES, DEF, generate, makeNode, type Category, type Node } from "@/lib/blocks";
 
 export const Route = createFileRoute("/editor")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "Block Editor — BloxdStudio" },

@@ -16,6 +16,7 @@ import { Route as EditorRouteImport } from './routes/editor'
 import { Route as ForgeRouteImport } from './routes/forge'
 import { Route as RoadsRouteImport } from './routes/roads'
 import { Route as SchematicRouteImport } from './routes/schematic'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -52,6 +53,11 @@ const SchematicRoute = SchematicRouteImport.update({
   path: '/schematic',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -61,6 +67,7 @@ export interface FileRoutesByFullPath {
   '/forge': typeof ForgeRoute
   '/roads': typeof RoadsRoute
   '/schematic': typeof SchematicRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,6 +77,7 @@ export interface FileRoutesByTo {
   '/forge': typeof ForgeRoute
   '/roads': typeof RoadsRoute
   '/schematic': typeof SchematicRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,14 +88,29 @@ export interface FileRoutesById {
   '/forge': typeof ForgeRoute
   '/roads': typeof RoadsRoute
   '/schematic': typeof SchematicRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/account' | '/auth' | '/editor' | '/forge' | '/roads' | '/schematic'
+    | '/'
+    | '/account'
+    | '/auth'
+    | '/editor'
+    | '/forge'
+    | '/roads'
+    | '/schematic'
+    | '/sitemap.xml'
   fileRoutesByTo: FileRoutesByTo
   to:
-    '/' | '/account' | '/auth' | '/editor' | '/forge' | '/roads' | '/schematic'
+    | '/'
+    | '/account'
+    | '/auth'
+    | '/editor'
+    | '/forge'
+    | '/roads'
+    | '/schematic'
+    | '/sitemap.xml'
   id:
     | '__root__'
     | '/'
@@ -97,6 +120,7 @@ export interface FileRouteTypes {
     | '/forge'
     | '/roads'
     | '/schematic'
+    | '/sitemap.xml'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -107,6 +131,7 @@ export interface RootRouteChildren {
   ForgeRoute: typeof ForgeRoute
   RoadsRoute: typeof RoadsRoute
   SchematicRoute: typeof SchematicRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -160,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SchematicRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -171,6 +203,7 @@ const rootRouteChildren: RootRouteChildren = {
   ForgeRoute: ForgeRoute,
   RoadsRoute: RoadsRoute,
   SchematicRoute: SchematicRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

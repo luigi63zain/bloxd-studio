@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/account")({
+  staticData: { sitemap: false },
   head: () => ({
     meta: [
       { title: "Your account — BloxdStudio" },
