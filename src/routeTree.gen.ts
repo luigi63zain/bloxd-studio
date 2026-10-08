@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as AiRouteImport } from './routes/ai'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ChatRouteImport } from './routes/chat'
 import { Route as EditorRouteImport } from './routes/editor'
 import { Route as ForgeRouteImport } from './routes/forge'
 import { Route as RoadsRouteImport } from './routes/roads'
@@ -37,6 +38,11 @@ const AiRoute = AiRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChatRoute = ChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EditorRoute = EditorRouteImport.update({
@@ -70,6 +76,7 @@ export interface FileRoutesByFullPath {
   '/account': typeof AccountRoute
   '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
+  '/chat': typeof ChatRoute
   '/editor': typeof EditorRoute
   '/forge': typeof ForgeRoute
   '/roads': typeof RoadsRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByTo {
   '/account': typeof AccountRoute
   '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
+  '/chat': typeof ChatRoute
   '/editor': typeof EditorRoute
   '/forge': typeof ForgeRoute
   '/roads': typeof RoadsRoute
@@ -93,6 +101,7 @@ export interface FileRoutesById {
   '/account': typeof AccountRoute
   '/ai': typeof AiRoute
   '/auth': typeof AuthRoute
+  '/chat': typeof ChatRoute
   '/editor': typeof EditorRoute
   '/forge': typeof ForgeRoute
   '/roads': typeof RoadsRoute
@@ -106,6 +115,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/ai'
     | '/auth'
+    | '/chat'
     | '/editor'
     | '/forge'
     | '/roads'
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/ai'
     | '/auth'
+    | '/chat'
     | '/editor'
     | '/forge'
     | '/roads'
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/ai'
     | '/auth'
+    | '/chat'
     | '/editor'
     | '/forge'
     | '/roads'
@@ -140,6 +152,7 @@ export interface RootRouteChildren {
   AccountRoute: typeof AccountRoute
   AiRoute: typeof AiRoute
   AuthRoute: typeof AuthRoute
+  ChatRoute: typeof ChatRoute
   EditorRoute: typeof EditorRoute
   ForgeRoute: typeof ForgeRoute
   RoadsRoute: typeof RoadsRoute
@@ -175,6 +188,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chat': {
+      id: '/chat'
+      path: '/chat'
+      fullPath: '/chat'
+      preLoaderRoute: typeof ChatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/editor': {
@@ -220,6 +240,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountRoute: AccountRoute,
   AiRoute: AiRoute,
   AuthRoute: AuthRoute,
+  ChatRoute: ChatRoute,
   EditorRoute: EditorRoute,
   ForgeRoute: ForgeRoute,
   RoadsRoute: RoadsRoute,

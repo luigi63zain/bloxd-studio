@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import { LinkText } from "@/components/LinkText";
 
 type Post = { id: string; user_id: string; author: string; author_is_owner: boolean; body: string; created_at: string };
 
@@ -39,7 +40,7 @@ export function HubPosts() {
       {user ? (
         <div className="mt-4">
           <textarea value={body} onChange={(e) => setBody(e.target.value)} maxLength={1000} rows={3}
-            placeholder="Share an idea, ask a question…" className="w-full rounded-xl bg-background/60 p-3 text-sm ring-1 ring-border outline-none" />
+            placeholder="Share an idea, ask a question, or paste a link…" className="w-full rounded-xl bg-background/60 p-3 text-sm ring-1 ring-border outline-none" />
           <button disabled={busy || !body.trim()} onClick={post} className="btn-voxel mt-2 rounded-xl px-5 py-2 text-sm disabled:opacity-50">Post</button>
         </div>
       ) : (
@@ -57,7 +58,7 @@ export function HubPosts() {
                 <button onClick={() => del(p.id)} className="ml-auto hover:text-coral">Delete</button>
               )}
             </div>
-            <p className="mt-2 whitespace-pre-wrap text-sm">{p.body}</p>
+            <div className="mt-2 whitespace-pre-wrap break-words text-sm"><LinkText text={p.body} /></div>
           </div>
         ))}
       </div>
