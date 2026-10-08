@@ -53,6 +53,30 @@ export type Database = {
         }
         Relationships: []
       }
+      friendships: {
+        Row: {
+          addressee: string
+          created_at: string
+          id: string
+          requester: string
+          status: string
+        }
+        Insert: {
+          addressee: string
+          created_at?: string
+          id?: string
+          requester: string
+          status?: string
+        }
+        Update: {
+          addressee?: string
+          created_at?: string
+          id?: string
+          requester?: string
+          status?: string
+        }
+        Relationships: []
+      }
       hub_posts: {
         Row: {
           author: string
@@ -80,6 +104,39 @@ export type Database = {
         }
         Relationships: []
       }
+      messages: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          kind: string
+          recipient: string | null
+          sender: string
+          sender_is_owner: boolean
+          sender_name: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          kind?: string
+          recipient?: string | null
+          sender: string
+          sender_is_owner?: boolean
+          sender_name?: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          recipient?: string | null
+          sender?: string
+          sender_is_owner?: boolean
+          sender_name?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -100,6 +157,38 @@ export type Database = {
           username_changed_at?: string | null
         }
         Relationships: []
+      }
+      reactions: {
+        Row: {
+          created_at: string
+          emoji: string
+          id: string
+          message_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          emoji: string
+          id?: string
+          message_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          emoji?: string
+          id?: string
+          message_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reactions_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
@@ -124,6 +213,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      are_friends: { Args: { _a: string; _b: string }; Returns: boolean }
       clean_text: { Args: { _t: string }; Returns: string }
       has_role: {
         Args: {
