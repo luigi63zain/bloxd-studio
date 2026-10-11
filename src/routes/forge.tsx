@@ -6,6 +6,7 @@ import { Glows, SiteHeader } from "@/components/SiteHeader";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
 import { fromFile, type SchemFile } from "@/lib/schem";
+import { downloadBloxdschem } from "@/lib/bloxdschem";
 
 export const Route = createFileRoute("/forge")({
   staticData: { sitemap: true },
@@ -83,6 +84,11 @@ function Forge() {
 function PostModal({ post, onClose }: { post: Post; onClose: () => void }) {
   const navigate = useNavigate();
   const download = () => {
+    if (post.kind !== "code") {
+      const f = post.data as unknown as SchemFile;
+      downloadBloxdschem(post.title, fromFile(f), f.size ?? [16, 16, 16]);
+      return;
+    }
     const a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob([JSON.stringify(post.data, null, 2)], { type: "application/json" }));
     a.download = `${post.title}.${post.kind === "code" ? "bxs" : "bloxdschem"}`;
