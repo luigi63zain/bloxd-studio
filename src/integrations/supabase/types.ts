@@ -18,6 +18,7 @@ export type Database = {
         Row: {
           author: string
           author_is_owner: boolean
+          author_rank: string
           code: string
           created_at: string
           data: Json
@@ -30,6 +31,7 @@ export type Database = {
         Insert: {
           author?: string
           author_is_owner?: boolean
+          author_rank?: string
           code?: string
           created_at?: string
           data: Json
@@ -42,6 +44,7 @@ export type Database = {
         Update: {
           author?: string
           author_is_owner?: boolean
+          author_rank?: string
           code?: string
           created_at?: string
           data?: Json
@@ -81,25 +84,34 @@ export type Database = {
         Row: {
           author: string
           author_is_owner: boolean
+          author_rank: string
           body: string
           created_at: string
           id: string
+          media_path: string | null
+          media_type: string | null
           user_id: string
         }
         Insert: {
           author?: string
           author_is_owner?: boolean
+          author_rank?: string
           body: string
           created_at?: string
           id?: string
+          media_path?: string | null
+          media_type?: string | null
           user_id?: string
         }
         Update: {
           author?: string
           author_is_owner?: boolean
+          author_rank?: string
           body?: string
           created_at?: string
           id?: string
+          media_path?: string | null
+          media_type?: string | null
           user_id?: string
         }
         Relationships: []
@@ -114,6 +126,7 @@ export type Database = {
           sender: string
           sender_is_owner: boolean
           sender_name: string
+          sender_rank: string
         }
         Insert: {
           body: string
@@ -124,6 +137,7 @@ export type Database = {
           sender: string
           sender_is_owner?: boolean
           sender_name?: string
+          sender_rank?: string
         }
         Update: {
           body?: string
@@ -134,8 +148,41 @@ export type Database = {
           sender?: string
           sender_is_owner?: boolean
           sender_name?: string
+          sender_rank?: string
         }
         Relationships: []
+      }
+      post_reactions: {
+        Row: {
+          created_at: string
+          emoji: string
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          emoji: string
+          id?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          emoji?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_reactions_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "hub_posts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -223,6 +270,7 @@ export type Database = {
         Returns: boolean
       }
       make_username: { Args: { _email: string; _uid: string }; Returns: string }
+      rank_of: { Args: { _u: string }; Returns: string }
     }
     Enums: {
       app_role: "owner" | "admin" | "user"
