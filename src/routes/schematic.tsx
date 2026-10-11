@@ -3,7 +3,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Glows, SiteHeader } from "@/components/SiteHeader";
 import { ShareButton } from "@/components/ShareDialog";
-import { COLOR, HEIGHT, PALETTE, SIZE, fromFile, schemCode, toFile, type SchemFile, type Voxels } from "@/lib/schem";
+import { COLOR, HEIGHT, PALETTE, SIZE, schemCode, toFile, type Voxels } from "@/lib/schem";
+import { downloadBloxdschem, readSchemFile } from "@/lib/bloxdschem";
 
 export const Route = createFileRoute("/schematic")({
   staticData: { sitemap: true },
@@ -50,19 +51,13 @@ function Schematic() {
   const file = useMemo(() => toFile(name, vox), [name, vox]);
   const count = Object.keys(vox).length;
 
-  const exportFile = () => {
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(new Blob([JSON.stringify(file)], { type: "application/json" }));
-    a.download = `${name || "schematic"}.bloxdschem`;
-    a.click(); URL.revokeObjectURL(a.href);
-  };
+  const exportFile = () => downloadBloxdschem(name, vox, [SIZE, HEIGHT, SIZE]);
   const importFile = async (f?: File) => {
     if (!f) return;
     try {
-      const p = JSON.parse(await f.text()) as SchemFile;
-      if (p.format !== "bloxdschem") throw new Error();
-      setName(p.name || "imported"); setVox(fromFile(p)); toast.success(`Imported ${p.name}`);
-    } catch { toast.error("That isn't a BloxdStudio .bloxdschem file"); }
+      const p = await readSchemFile(f);
+      setName(p.name || "imported"); setVox(p.vox); toast.success(`Imported ${p.name}`);
+    } catch { toast.error("That isn't a .bloxdschem file"); }
     if (fileRef.current) fileRef.current.value = "";
   };
 

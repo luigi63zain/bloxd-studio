@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Glows, SiteHeader } from "@/components/SiteHeader";
 import { ShareButton } from "@/components/ShareDialog";
+import { downloadBloxdschem } from "@/lib/bloxdschem";
 import { COLOR, PALETTE, schemCode, toFile, type Voxels } from "@/lib/schem";
 
 export const Route = createFileRoute("/roads")({
@@ -70,12 +71,7 @@ function Roads() {
   const code = useMemo(() => schemCode(vox), [vox]);
   const file = useMemo(() => toFile(name, vox, [G, 1, G]), [name, vox]);
 
-  const exportFile = () => {
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(new Blob([JSON.stringify(file)], { type: "application/json" }));
-    a.download = `${name || "road"}.bloxdschem`;
-    a.click(); URL.revokeObjectURL(a.href);
-  };
+  const exportFile = () => downloadBloxdschem(name || "road", vox, [G, 1, G]);
 
   return (
     <div className="relative min-h-screen overflow-hidden">
