@@ -50,6 +50,13 @@
       "when": 1791844770266,
       "tag": "0006_post_media_read_scoped",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1791844927671,
+      "tag": "0007_hub_posts_signed_in_read",
+      "breakpoints": true
     }
   ]
 }

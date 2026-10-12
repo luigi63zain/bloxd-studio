@@ -17,7 +17,7 @@ export function HubPosts() {
     const { data } = await supabase.from("hub_posts").select("*").order("created_at", { ascending: false }).limit(50);
     setPosts((data as Post[]) ?? []);
   };
-  useEffect(() => { void load(); }, []);
+  useEffect(() => { if (user) void load(); else setPosts([]); }, [user]);
 
   const post = async () => {
     if (!user) return;
@@ -44,10 +44,10 @@ export function HubPosts() {
           <button disabled={busy || !body.trim()} onClick={post} className="btn-voxel mt-2 rounded-xl px-5 py-2 text-sm disabled:opacity-50">Post</button>
         </div>
       ) : (
-        <p className="mt-3 text-sm text-steel"><Link to="/auth" className="text-bright underline">Sign in</Link> to post.</p>
+        <p className="mt-3 text-sm text-steel"><Link to="/auth" className="text-bright underline">Sign in</Link> to read and write posts.</p>
       )}
       <div className="mt-5 space-y-3">
-        {posts.length === 0 && <p className="text-sm text-steel">No posts yet. Be the first!</p>}
+        {user && posts.length === 0 && <p className="text-sm text-steel">No posts yet. Be the first!</p>}
         {posts.map((p) => (
           <div key={p.id} className="rounded-xl bg-background/40 p-4 ring-1 ring-border">
             <div className="flex items-center gap-2 text-xs text-steel">
