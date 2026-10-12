@@ -57,6 +57,13 @@
       "when": 1791844927671,
       "tag": "0007_hub_posts_signed_in_read",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1791845612668,
+      "tag": "0008_presence_streak_shop_featured_stickers",
+      "breakpoints": true
     }
   ]
 }

@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      featured_games: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          image_url: string
+          link: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          id?: string
+          image_url?: string
+          link: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          image_url?: string
+          link?: string
+          title?: string
+        }
+        Relationships: []
+      }
       forge_posts: {
         Row: {
           author: string
@@ -90,6 +117,7 @@ export type Database = {
           id: string
           media_path: string | null
           media_type: string | null
+          sticker: Json | null
           user_id: string
         }
         Insert: {
@@ -101,6 +129,7 @@ export type Database = {
           id?: string
           media_path?: string | null
           media_type?: string | null
+          sticker?: Json | null
           user_id?: string
         }
         Update: {
@@ -112,6 +141,7 @@ export type Database = {
           id?: string
           media_path?: string | null
           media_type?: string | null
+          sticker?: Json | null
           user_id?: string
         }
         Relationships: []
@@ -205,6 +235,27 @@ export type Database = {
         }
         Relationships: []
       }
+      purchases: {
+        Row: {
+          created_at: string
+          id: string
+          item: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          item: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          item?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       reactions: {
         Row: {
           created_at: string
@@ -237,6 +288,30 @@ export type Database = {
           },
         ]
       }
+      stickers: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          pixels: Json
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          pixels: Json
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          pixels?: Json
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
@@ -255,13 +330,53 @@ export type Database = {
         }
         Relationships: []
       }
+      wallets: {
+        Row: {
+          badge: string
+          coins: number
+          last_seen: string | null
+          name_color: string
+          streak: number
+          streak_day: string | null
+          user_id: string
+        }
+        Insert: {
+          badge?: string
+          coins?: number
+          last_seen?: string | null
+          name_color?: string
+          streak?: number
+          streak_day?: string | null
+          user_id: string
+        }
+        Update: {
+          badge?: string
+          coins?: number
+          last_seen?: string | null
+          name_color?: string
+          streak?: number
+          streak_day?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wallets_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
       are_friends: { Args: { _a: string; _b: string }; Returns: boolean }
+      buy_item: { Args: { _item: string }; Returns: number }
       clean_text: { Args: { _t: string }; Returns: string }
+      equip_item: { Args: { _item: string; _kind: string }; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -269,8 +384,27 @@ export type Database = {
         }
         Returns: boolean
       }
+      heartbeat: {
+        Args: never
+        Returns: {
+          badge: string
+          coins: number
+          last_seen: string | null
+          name_color: string
+          streak: number
+          streak_day: string | null
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "wallets"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       make_username: { Args: { _email: string; _uid: string }; Returns: string }
       rank_of: { Args: { _u: string }; Returns: string }
+      shop_price: { Args: { _item: string }; Returns: number }
     }
     Enums: {
       app_role: "owner" | "admin" | "user"
