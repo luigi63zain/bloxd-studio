@@ -1,6 +1,6 @@
 import { BADGE_ICON, NAME_CLASS } from "@/lib/shop";
 
-export function UserName({ name, color, badge, rank }: { name: string; color?: string; badge?: string; rank?: string }) {
+export function UserName({ name, color, badge, rank }: { name: string; color?: string | undefined; badge?: string | undefined; rank?: string | undefined }) {
   return (
     <span className="inline-flex items-center gap-1">
       <span className={`font-bold ${color ? NAME_CLASS[color] ?? "text-foreground" : "text-foreground"}`}>{name}</span>
