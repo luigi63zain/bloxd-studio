@@ -27,7 +27,7 @@ const blank = () => Array<string>(STICKER_SIZE * STICKER_SIZE).fill("");
 function Stickers() {
   const { user } = useAuth();
   const [pixels, setPixels] = useState<string[]>(blank);
-  const [color, setColor] = useState(STICKER_COLORS[1]);
+  const [color, setColor] = useState<string>(STICKER_COLORS[1] ?? "#000000");
   const [name, setName] = useState("");
   const [down, setDown] = useState(false);
   const [mine, setMine] = useState<S[]>([]);
