@@ -16,9 +16,12 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ChatRouteImport } from './routes/chat'
 import { Route as EditorRouteImport } from './routes/editor'
 import { Route as ForgeRouteImport } from './routes/forge'
+import { Route as PostsRouteImport } from './routes/posts'
 import { Route as RoadsRouteImport } from './routes/roads'
 import { Route as SchematicRouteImport } from './routes/schematic'
+import { Route as ShopRouteImport } from './routes/shop'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as StickersRouteImport } from './routes/stickers'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -55,6 +58,11 @@ const ForgeRoute = ForgeRouteImport.update({
   path: '/forge',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PostsRoute = PostsRouteImport.update({
+  id: '/posts',
+  path: '/posts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RoadsRoute = RoadsRouteImport.update({
   id: '/roads',
   path: '/roads',
@@ -65,9 +73,19 @@ const SchematicRoute = SchematicRouteImport.update({
   path: '/schematic',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ShopRoute = ShopRouteImport.update({
+  id: '/shop',
+  path: '/shop',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StickersRoute = StickersRouteImport.update({
+  id: '/stickers',
+  path: '/stickers',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -79,9 +97,12 @@ export interface FileRoutesByFullPath {
   '/chat': typeof ChatRoute
   '/editor': typeof EditorRoute
   '/forge': typeof ForgeRoute
+  '/posts': typeof PostsRoute
   '/roads': typeof RoadsRoute
   '/schematic': typeof SchematicRoute
+  '/shop': typeof ShopRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/stickers': typeof StickersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -91,9 +112,12 @@ export interface FileRoutesByTo {
   '/chat': typeof ChatRoute
   '/editor': typeof EditorRoute
   '/forge': typeof ForgeRoute
+  '/posts': typeof PostsRoute
   '/roads': typeof RoadsRoute
   '/schematic': typeof SchematicRoute
+  '/shop': typeof ShopRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/stickers': typeof StickersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -104,9 +128,12 @@ export interface FileRoutesById {
   '/chat': typeof ChatRoute
   '/editor': typeof EditorRoute
   '/forge': typeof ForgeRoute
+  '/posts': typeof PostsRoute
   '/roads': typeof RoadsRoute
   '/schematic': typeof SchematicRoute
+  '/shop': typeof ShopRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/stickers': typeof StickersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -118,9 +145,12 @@ export interface FileRouteTypes {
     | '/chat'
     | '/editor'
     | '/forge'
+    | '/posts'
     | '/roads'
     | '/schematic'
+    | '/shop'
     | '/sitemap.xml'
+    | '/stickers'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -130,9 +160,12 @@ export interface FileRouteTypes {
     | '/chat'
     | '/editor'
     | '/forge'
+    | '/posts'
     | '/roads'
     | '/schematic'
+    | '/shop'
     | '/sitemap.xml'
+    | '/stickers'
   id:
     | '__root__'
     | '/'
@@ -142,9 +175,12 @@ export interface FileRouteTypes {
     | '/chat'
     | '/editor'
     | '/forge'
+    | '/posts'
     | '/roads'
     | '/schematic'
+    | '/shop'
     | '/sitemap.xml'
+    | '/stickers'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -155,9 +191,12 @@ export interface RootRouteChildren {
   ChatRoute: typeof ChatRoute
   EditorRoute: typeof EditorRoute
   ForgeRoute: typeof ForgeRoute
+  PostsRoute: typeof PostsRoute
   RoadsRoute: typeof RoadsRoute
   SchematicRoute: typeof SchematicRoute
+  ShopRoute: typeof ShopRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  StickersRoute: typeof StickersRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -211,6 +250,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ForgeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/posts': {
+      id: '/posts'
+      path: '/posts'
+      fullPath: '/posts'
+      preLoaderRoute: typeof PostsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/roads': {
       id: '/roads'
       path: '/roads'
@@ -225,11 +271,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SchematicRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/shop': {
+      id: '/shop'
+      path: '/shop'
+      fullPath: '/shop'
+      preLoaderRoute: typeof ShopRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/stickers': {
+      id: '/stickers'
+      path: '/stickers'
+      fullPath: '/stickers'
+      preLoaderRoute: typeof StickersRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -243,9 +303,12 @@ const rootRouteChildren: RootRouteChildren = {
   ChatRoute: ChatRoute,
   EditorRoute: EditorRoute,
   ForgeRoute: ForgeRoute,
+  PostsRoute: PostsRoute,
   RoadsRoute: RoadsRoute,
   SchematicRoute: SchematicRoute,
+  ShopRoute: ShopRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  StickersRoute: StickersRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
