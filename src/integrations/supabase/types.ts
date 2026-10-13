@@ -403,6 +403,27 @@ export type Database = {
         }
       }
       make_username: { Args: { _email: string; _uid: string }; Returns: string }
+      online_players: {
+        Args: never
+        Returns: {
+          badge: string
+          name_color: string
+          rank: string
+          streak: number
+          user_id: string
+          username: string
+        }[]
+      }
+      public_looks: {
+        Args: { _ids: string[] }
+        Returns: {
+          badge: string
+          last_seen: string
+          name_color: string
+          streak: number
+          user_id: string
+        }[]
+      }
       rank_of: { Args: { _u: string }; Returns: string }
       shop_price: { Args: { _item: string }; Returns: number }
     }

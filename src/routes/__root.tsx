@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import { ChatNotifier } from "@/components/ChatNotifier";
+import { Presence } from "@/components/Presence";
 
 function NotFoundComponent() {
   return (
@@ -85,13 +86,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "BloxdStudio — bloxd.io community hub and block coding editor." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "google-site-verification", content: "MbtNzepLfIPtOhscf9X_nToBgjiUoO_o_7aKuECgfXU" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;500;700&display=swap" },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", type: "image/png", href: "/favicon.png" },
     ],
   }),
   shellComponent: RootShell,
@@ -123,6 +125,7 @@ function RootComponent() {
       <Outlet />
       <Toaster />
       <ChatNotifier />
+      <Presence />
     </QueryClientProvider>
   );
 }

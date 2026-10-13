@@ -181,3 +181,4 @@
 @keyframes r-float-in { from { opacity:0; transform: translateY(8px) } to { opacity:1; transform: none } }
 .float-in { animation: r-float-in .35s ease-out both; }
 @media (prefers-reduced-motion: reduce) { .react-bounce,.react-flicker,.react-spin,.react-shake,.react-pulse,.react-wobble,.float-in { animation: none; } }
+.name-rainbow { background: linear-gradient(90deg, var(--coral), var(--amber), var(--mint), var(--sky), var(--grape)); -webkit-background-clip: text; background-clip: text; color: transparent; }
