@@ -29,8 +29,8 @@ export function HubPosts({ limit = 50, title = "Community posts", showMore = fal
     setPosts(list);
     const ids = [...new Set(list.map((p) => p.user_id))];
     if (ids.length) {
-      const { data: w } = await supabase.from("wallets").select("*").in("user_id", ids);
-      setWallets(Object.fromEntries(((w as Wallet[]) ?? []).map((x) => [x.user_id, x])));
+      const { data: w } = await supabase.rpc("public_looks", { _ids: ids });
+      setWallets(Object.fromEntries(((w as unknown as Wallet[]) ?? []).map((x) => [x.user_id, x])));
     }
   };
   useEffect(() => {

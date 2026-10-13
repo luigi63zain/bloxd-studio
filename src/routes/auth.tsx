@@ -3,6 +3,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Glows, SiteHeader } from "@/components/SiteHeader";
 import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable/index";
 
 export const Route = createFileRoute("/auth")({
   staticData: { sitemap: false },
@@ -53,6 +54,12 @@ function AuthPage() {
           <input type="password" required minLength={6} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}
             className="rounded-lg bg-ink/60 px-3 py-2.5 text-sm outline-none ring-1 ring-inset ring-border focus:ring-bright/50" />
           <button disabled={busy} className="btn-voxel rounded-lg px-3 py-2.5 text-sm">{busy ? "..." : mode === "in" ? "Sign in" : "Sign up"}</button>
+          <button type="button" onClick={async () => {
+            const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
+            if (r.error) { toast.error("Google sign-in failed"); return; }
+            if (r.redirected) return;
+            navigate({ to: "/" });
+          }} className="btn-ghost rounded-lg px-3 py-2.5 text-sm">Continue with Google</button>
           <button type="button" onClick={() => setMode(mode === "in" ? "up" : "in")} className="text-xs text-steel">
             {mode === "in" ? "No account? Sign up" : "Have an account? Sign in"}
           </button>

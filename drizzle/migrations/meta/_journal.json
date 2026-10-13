@@ -64,6 +64,13 @@
       "when": 1791845612668,
       "tag": "0008_presence_streak_shop_featured_stickers",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1791852594136,
+      "tag": "0009_wallets_private_media_owner",
+      "breakpoints": true
     }
   ]
 }

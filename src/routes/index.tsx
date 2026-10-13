@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import { Glows, SiteHeader } from "@/components/SiteHeader";
 import { HubPosts } from "@/components/HubPosts";
 import { supabase } from "@/integrations/supabase/client";
+import { FeaturedGames, OnlineNow } from "@/components/HomeExtras";
+import { useAuth } from "@/hooks/use-auth";
+import { useWallet } from "@/hooks/use-wallet";
 
 export const Route = createFileRoute("/")({
   staticData: { sitemap: true },
@@ -26,9 +29,14 @@ const TOOLS = [
   { to: "/ai", icon: "🤖", title: "AI Generator", text: "Describe it, the AI makes it.", tone: "bg-grape/15" },
   { to: "/forge", icon: "⚒️", title: "The Forge", text: "Browse and remix shared creations.", tone: "bg-coral/15" },
   { to: "/chat", icon: "💬", title: "Chat & Parties", text: "Friends, world chat, play together.", tone: "bg-mint/15" },
+  { to: "/posts", icon: "📰", title: "Posts", text: "Share ideas and earn ULTRACOINS.", tone: "bg-sky/15" },
+  { to: "/stickers", icon: "🎨", title: "Sticker Maker", text: "Draw pixel stickers for your posts.", tone: "bg-coral/15" },
+  { to: "/shop", icon: "🪙", title: "ULTRACOINS Shop", text: "Name colours and badges.", tone: "bg-amber/15" },
 ] as const;
 
 function Hub() {
+  const { user } = useAuth();
+  const { wallet } = useWallet(user?.id);
   const [stats, setStats] = useState<{ forge: number; posts: number } | null>(null);
   useEffect(() => {
     void Promise.all([
@@ -54,15 +62,23 @@ function Hub() {
               <Link to="/chat" className="btn-ghost rounded-xl px-5 py-3 text-sm">▶ Play with friends</Link>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-3 self-center">
-            <Stat n={stats?.forge} label="Forge creations" />
-            <Stat n={stats?.posts} label="Community posts" />
-            <div className="col-span-2 rounded-2xl bg-background/40 p-4 ring-1 ring-border">
-              <div className="text-[11px] uppercase tracking-widest text-steel">Tip</div>
-              <p className="mt-1 text-sm">Press <b>Play bloxd</b> in a friend's chat — you both land in the same party.</p>
+          <div className="grid gap-3 self-center">
+            <div className="grid grid-cols-2 gap-3">
+              <Stat n={stats?.forge} label="Forge creations" />
+              {user && wallet ? (
+                <Link to="/shop" className="rounded-2xl bg-amber/10 p-4 ring-1 ring-amber/30">
+                  <div className="font-display text-3xl font-extrabold text-amber">🔥 {wallet.streak}</div>
+                  <div className="text-[11px] uppercase tracking-widest text-steel">day streak · 🪙 {wallet.coins}</div>
+                </Link>
+              ) : (
+                <Stat n={stats?.posts} label="Community posts" />
+              )}
             </div>
+            <OnlineNow />
           </div>
         </section>
+
+        <FeaturedGames />
 
         <section className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {TOOLS.map((t, i) => (
@@ -75,7 +91,7 @@ function Hub() {
           ))}
         </section>
 
-        <HubPosts />
+        <HubPosts limit={5} title="Latest posts" showMore />
       </div>
     </div>
   );
