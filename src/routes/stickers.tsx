@@ -70,7 +70,7 @@ function Stickers() {
               </div>
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {STICKER_COLORS.map((c) => (
-                  <button key={c || "erase"} onClick={() => setColor(c)} title={c ? c : "Eraser"}
+                  <button key={c || "erase"} onClick={() => setColor(c)} title={c ? c : "Eraser"} aria-label={c ? `Colour ${c}` : "Eraser"}
                     className={`size-7 rounded-md ring-2 ${color === c ? "ring-bright" : "ring-border"}`}
                     style={{ background: c || "transparent" }}>{c ? "" : "⌫"}</button>
                 ))}

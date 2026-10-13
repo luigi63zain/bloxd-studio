@@ -23,6 +23,7 @@ function PostsPage() {
       <Glows />
       <div className="relative mx-auto max-w-[900px] px-5 py-6 sm:px-8">
         <SiteHeader />
+        <h1 className="sr-only">Community posts</h1>
         <HubPosts limit={100} title="Posts" />
       </div>
     </div>

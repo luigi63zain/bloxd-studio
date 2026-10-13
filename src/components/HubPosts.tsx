@@ -73,7 +73,7 @@ export function HubPosts({ limit = 50, title = "Community posts", showMore = fal
           {pick && (
             <div className="mt-2 flex items-center gap-2 text-xs text-steel">
               <StickerArt pixels={pick.pixels} size={40} /> {pick.name}
-              <button onClick={() => setPick(null)} className="hover:text-coral">✕</button>
+              <button aria-label="Remove sticker" onClick={() => setPick(null)} className="hover:text-coral">✕</button>
             </div>
           )}
           <div className="mt-2 flex flex-wrap items-center gap-2">

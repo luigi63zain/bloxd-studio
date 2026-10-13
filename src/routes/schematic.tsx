@@ -72,6 +72,7 @@ function Schematic() {
       <Glows />
       <div className="relative mx-auto max-w-[1400px] px-5 py-6 sm:px-8">
         <SiteHeader />
+        <h1 className="sr-only">Schematic builder for bloxd.io</h1>
         <section className="glass mt-6 rounded-2xl p-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
