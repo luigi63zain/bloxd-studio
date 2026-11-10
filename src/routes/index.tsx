@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { FeaturedGames, OnlineNow } from "@/components/HomeExtras";
 import { useAuth } from "@/hooks/use-auth";
 import { useWallet } from "@/hooks/use-wallet";
+import { loadHomeStats } from "@/lib/home-stats";
 
 export const Route = createFileRoute("/")({
   staticData: { sitemap: true },
@@ -37,13 +38,16 @@ const TOOLS = [
 function Hub() {
   const { user } = useAuth();
   const { wallet } = useWallet(user?.id);
-  const [stats, setStats] = useState<{ forge: number; posts: number } | null>(null);
+  const [stats, setStats] = useState<{ forge: number | undefined; posts: number | undefined } | null>(null);
   useEffect(() => {
-    void Promise.all([
-      supabase.from("forge_posts").select("id", { count: "exact", head: true }),
-      supabase.from("hub_posts").select("id", { count: "exact", head: true }),
-    ]).then(([f, h]) => setStats({ forge: f.count ?? 0, posts: h.count ?? 0 }));
-  }, []);
+    let active = true;
+    setStats(null);
+    void loadHomeStats(user?.id, async (table) => {
+      const { count, error } = await supabase.from(table).select("id", { count: "exact", head: true });
+      return error || count === null ? undefined : count;
+    }).then((next) => { if (active) setStats(next); });
+    return () => { active = false; };
+  }, [user?.id]);
 
   return (
     <div className="relative min-h-screen overflow-hidden">
@@ -63,16 +67,16 @@ function Hub() {
             </div>
           </div>
           <div className="grid gap-3 self-center">
-            <div className="grid grid-cols-2 gap-3">
+            <div className={`grid gap-3 ${user ? "grid-cols-2" : "grid-cols-1"}`}>
               <Stat n={stats?.forge} label="Forge creations" />
               {user && wallet ? (
                 <Link to="/shop" className="rounded-2xl bg-amber/10 p-4 ring-1 ring-amber/30">
                   <div className="font-display text-3xl font-extrabold text-amber">🔥 {wallet.streak}</div>
                   <div className="text-[11px] uppercase tracking-widest text-steel">day streak · 🪙 {wallet.coins}</div>
                 </Link>
-              ) : (
+              ) : user ? (
                 <Stat n={stats?.posts} label="Community posts" />
-              )}
+              ) : null}
             </div>
             <OnlineNow />
           </div>
