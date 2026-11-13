@@ -14,6 +14,8 @@ export const Route = createFileRoute("/schematic")({
       { name: "description", content: "Build bloxd.io structures layer by layer and export them as .bloxdschem files." },
       { property: "og:title", content: "Schematic Builder — BloxdStudio" },
       { property: "og:description", content: "Paint voxel builds layer by layer, export .bloxdschem files and share them." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Schematic,

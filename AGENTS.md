@@ -10,3 +10,5 @@
 <!-- LOVABLE:END -->
 
 - Load homepage counts through `loadHomeStats`; never request private community counts without a signed-in user, and discard results after identity changes to prevent stale disclosure.
+- Wrap script outputs with the shared idempotent `withCodeCredit` helper at generation and sharing boundaries so old Forge scripts and new scripts receive the same credit without altering game behavior.
+- The photo maker uses source-grounded pose assets and browser canvas export, keeping pose selection and downloads available without a paid generation request.

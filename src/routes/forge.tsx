@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
 import { fromFile, type SchemFile } from "@/lib/schem";
 import { downloadBloxdschem } from "@/lib/bloxdschem";
+import { withCodeCredit } from "@/lib/code-credit";
 
 export const Route = createFileRoute("/forge")({
   staticData: { sitemap: true },
@@ -16,6 +17,8 @@ export const Route = createFileRoute("/forge")({
       { name: "description", content: "Browse, copy and remix bloxd.io codes and schematics shared by the community." },
       { property: "og:title", content: "The Forge — BloxdStudio" },
       { property: "og:description", content: "Community-shared bloxd.io codes and .bloxdschem builds." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Forge,
@@ -115,11 +118,11 @@ function PostModal({ post, onClose }: { post: Post; onClose: () => void }) {
           <button onClick={onClose} aria-label="Close" className="btn-ghost rounded px-2 py-1 text-xs">✕</button>
         </div>
         {post.description && <p className="mt-3 text-sm text-foreground/80">{post.description}</p>}
-        <pre className="mt-4 max-h-80 overflow-auto rounded-xl bg-ink/90 p-3 text-[11px] text-foreground/85 ring-1 ring-inset ring-border"><code>{post.code}</code></pre>
+        <pre className="mt-4 max-h-80 overflow-auto rounded-xl bg-ink/90 p-3 text-[11px] text-foreground/85 ring-1 ring-inset ring-border"><code>{withCodeCredit(post.code)}</code></pre>
         <div className="mt-4 flex flex-wrap justify-end gap-2">
           <button onClick={download} className="btn-ghost rounded-lg px-3 py-2 text-xs">Download file</button>
           <button onClick={remix} className="btn-ghost rounded-lg px-3 py-2 text-xs">Open & remix</button>
-          <button onClick={async () => { await navigator.clipboard.writeText(post.code); toast.success("Code copied"); }} className="btn-voxel rounded-lg px-3 py-2 text-xs">⧉ Copy code</button>
+          <button onClick={async () => { await navigator.clipboard.writeText(withCodeCredit(post.code)); toast.success("Code copied"); }} className="btn-voxel rounded-lg px-3 py-2 text-xs">⧉ Copy code</button>
         </div>
       </div>
     </div>

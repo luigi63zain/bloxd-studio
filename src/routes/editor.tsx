@@ -13,6 +13,8 @@ export const Route = createFileRoute("/editor")({
       { name: "description", content: "Stack puzzle-piece blocks to generate bloxd.io code. Copy it, export it, share it." },
       { property: "og:title", content: "Block Editor — BloxdStudio" },
       { property: "og:description", content: "Visual block coding for bloxd.io with copy, export and import." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Editor,

@@ -68,6 +68,8 @@
   --grape: oklch(0.72 0.14 300);
   --sky: oklch(0.72 0.13 245);
   --steel: oklch(0.65 0.05 225);
+  --photo-paper: #ffffff;
+  --photo-ink: #172d34;
 }
 
 @layer base {
@@ -182,3 +184,4 @@
 .float-in { animation: r-float-in .35s ease-out both; }
 @media (prefers-reduced-motion: reduce) { .react-bounce,.react-flicker,.react-spin,.react-shake,.react-pulse,.react-wobble,.float-in { animation: none; } }
 .name-rainbow { background: linear-gradient(90deg, var(--coral), var(--amber), var(--mint), var(--sky), var(--grape)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.photo-canvas, .photo-thumb { background: var(--photo-paper); }

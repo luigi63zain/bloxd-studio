@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { PALETTE } from "./schem";
+import { withCodeCredit } from "./code-credit";
 
 const API = "applyEffect applyHealthChange applyImpulse attemptSpawnMob broadcastMessage changePlayerIntoSkin clearInventory createItemDrop getBlock getHealth getPlayerIds getPosition giveItem hasItem isPlayerCrouching kickPlayer killLifeform playSound removeEffect removeItemName sendFlyingMiddleMessage sendMessage setBlock setBlockRect setClientOption setHealth setPlayerPose setPosition setShieldAmount setVelocity";
 const CALLBACKS = "onPlayerJoin onPlayerLeave onPlayerChat onPlayerJump onPlayerClick onPlayerChangeBlock onPlayerDamagingOtherPlayer onPlayerKilledOtherPlayer onPlayerDropItem onPlayerPickedUpItem onRespawnRequest tick";
@@ -32,7 +33,7 @@ export const generateCode = createServerFn({ method: "POST" })
     let code = (await askAI(CODE_SYSTEM, data.prompt)).trim();
     code = code.replace(/^```[a-z]*\n?/i, "").replace(/```$/, "").trim();
     code = code.replace(/(^|[^:"'])\/\/(.*)$/gm, (_m, a, b) => `${a}/*${b} */`);
-    return { code };
+    return { code: withCodeCredit(code) };
   });
 
 export const generateSchem = createServerFn({ method: "POST" })

@@ -1,4 +1,6 @@
 # BloxdStudio roadmap
+- [x] Add a credit and join link to every script output.
+- [x] Add a Bob photo maker with pose choices and PNG download.
 - [x] Hub home page
 - [x] Block coding editor with copy code
 - [x] Export / import project files

@@ -32,6 +32,7 @@ const TOOLS = [
   { to: "/chat", icon: "💬", title: "Chat & Parties", text: "Friends, world chat, play together.", tone: "bg-mint/15" },
   { to: "/posts", icon: "📰", title: "Posts", text: "Share ideas and earn ULTRACOINS.", tone: "bg-sky/15" },
   { to: "/stickers", icon: "🎨", title: "Sticker Maker", text: "Draw pixel stickers for your posts.", tone: "bg-coral/15" },
+  { to: "/photos", icon: "📷", title: "Bob Photos", text: "Bob in a pose of your choice.", tone: "bg-mint/15" },
   { to: "/shop", icon: "🪙", title: "ULTRACOINS Shop", text: "Name colours and badges.", tone: "bg-amber/15" },
 ] as const;
 

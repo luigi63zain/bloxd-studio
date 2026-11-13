@@ -1,3 +1,5 @@
+import { withCodeCredit } from "./code-credit";
+
 export const SIZE = 16;
 export const HEIGHT = 16;
 
@@ -51,9 +53,9 @@ export function fromFile(f: SchemFile): Voxels {
 
 export function schemCode(v: Voxels): string {
   const entries = Object.entries(v);
-  if (!entries.length) return "/* place some blocks first */\n";
+  if (!entries.length) return withCodeCredit("/* place some blocks first */\n");
   const list = entries.map(([k, b]) => `  [${k}, ${JSON.stringify(fixName(b))}],`).join("\n");
-  return `/* Builds the schematic where the player who runs it is standing */
+  return withCodeCredit(`/* Builds the schematic where the player who runs it is standing */
 const [px, py, pz] = api.getPosition(myId);
 const blocks = [
 ${list}
@@ -61,5 +63,5 @@ ${list}
 for (const [x, y, z, name] of blocks) {
   api.setBlock(Math.floor(px) + x, Math.floor(py) + y, Math.floor(pz) + z, name);
 }
-`;
+`);
 }

@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
 import { useAuth } from "@/hooks/use-auth";
+import { withCodeCredit } from "@/lib/code-credit";
 
 type Props = { kind: "code" | "schematic"; defaultTitle: string; data: unknown; code: string };
 
@@ -29,7 +30,7 @@ function ShareDialog({ kind, defaultTitle, data, code, onClose }: Props & { onCl
     if (!user) localStorage.setItem("bloxdstudio-author", author);
     const { error } = await supabase.from("forge_posts").insert({
       kind, title: title.trim().slice(0, 80), author: (author.trim() || "anonymous").slice(0, 40),
-      description: description.trim().slice(0, 500), data: data as Json, code,
+      description: description.trim().slice(0, 500), data: data as Json, code: withCodeCredit(code),
     });
     setBusy(false);
     if (error) { toast.error(error.message.includes("belongs to an account") ? "That username belongs to an account. Sign in to use it." : "Could not share it, try again"); return; }

@@ -1,3 +1,5 @@
+import { withCodeCredit } from "./code-credit";
+
 export type Category = "event" | "world" | "player" | "logic" | "math";
 
 export type Field = { key: string; kind: "text" | "number"; default: string };
@@ -232,5 +234,5 @@ export function genList(nodes: Node[]): string {
 }
 
 export function generate(scripts: Node[]): string {
-  return scripts.map((s) => genList([s]).trimEnd()).join("\n\n") + "\n";
+  return withCodeCredit(scripts.map((s) => genList([s]).trimEnd()).join("\n\n") + "\n");
 }

@@ -4,7 +4,7 @@ import { useWallet } from "@/hooks/use-wallet";
 import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/logo.png";
 
-const NAV = [["/", "Hub"], ["/posts", "Posts"], ["/editor", "Code"], ["/schematic", "Schematics"], ["/roads", "Roads"], ["/forge", "Forge"], ["/ai", "AI"], ["/stickers", "Stickers"], ["/shop", "Shop"], ["/chat", "Chat"]] as const;
+const NAV = [["/", "Hub"], ["/posts", "Posts"], ["/editor", "Code"], ["/schematic", "Schematics"], ["/roads", "Roads"], ["/forge", "Forge"], ["/ai", "AI"], ["/photos", "Photos"], ["/stickers", "Stickers"], ["/shop", "Shop"], ["/chat", "Chat"]] as const;
 
 export function SiteHeader() {
   const { user, isOwner, profile } = useAuth();
