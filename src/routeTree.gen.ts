@@ -16,6 +16,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ChatRouteImport } from './routes/chat'
 import { Route as EditorRouteImport } from './routes/editor'
 import { Route as ForgeRouteImport } from './routes/forge'
+import { Route as PhotosRouteImport } from './routes/photos'
 import { Route as PostsRouteImport } from './routes/posts'
 import { Route as RoadsRouteImport } from './routes/roads'
 import { Route as SchematicRouteImport } from './routes/schematic'
@@ -58,6 +59,11 @@ const ForgeRoute = ForgeRouteImport.update({
   path: '/forge',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PhotosRoute = PhotosRouteImport.update({
+  id: '/photos',
+  path: '/photos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PostsRoute = PostsRouteImport.update({
   id: '/posts',
   path: '/posts',
@@ -97,6 +103,7 @@ export interface FileRoutesByFullPath {
   '/chat': typeof ChatRoute
   '/editor': typeof EditorRoute
   '/forge': typeof ForgeRoute
+  '/photos': typeof PhotosRoute
   '/posts': typeof PostsRoute
   '/roads': typeof RoadsRoute
   '/schematic': typeof SchematicRoute
@@ -112,6 +119,7 @@ export interface FileRoutesByTo {
   '/chat': typeof ChatRoute
   '/editor': typeof EditorRoute
   '/forge': typeof ForgeRoute
+  '/photos': typeof PhotosRoute
   '/posts': typeof PostsRoute
   '/roads': typeof RoadsRoute
   '/schematic': typeof SchematicRoute
@@ -128,6 +136,7 @@ export interface FileRoutesById {
   '/chat': typeof ChatRoute
   '/editor': typeof EditorRoute
   '/forge': typeof ForgeRoute
+  '/photos': typeof PhotosRoute
   '/posts': typeof PostsRoute
   '/roads': typeof RoadsRoute
   '/schematic': typeof SchematicRoute
@@ -145,6 +154,7 @@ export interface FileRouteTypes {
     | '/chat'
     | '/editor'
     | '/forge'
+    | '/photos'
     | '/posts'
     | '/roads'
     | '/schematic'
@@ -160,6 +170,7 @@ export interface FileRouteTypes {
     | '/chat'
     | '/editor'
     | '/forge'
+    | '/photos'
     | '/posts'
     | '/roads'
     | '/schematic'
@@ -175,6 +186,7 @@ export interface FileRouteTypes {
     | '/chat'
     | '/editor'
     | '/forge'
+    | '/photos'
     | '/posts'
     | '/roads'
     | '/schematic'
@@ -191,6 +203,7 @@ export interface RootRouteChildren {
   ChatRoute: typeof ChatRoute
   EditorRoute: typeof EditorRoute
   ForgeRoute: typeof ForgeRoute
+  PhotosRoute: typeof PhotosRoute
   PostsRoute: typeof PostsRoute
   RoadsRoute: typeof RoadsRoute
   SchematicRoute: typeof SchematicRoute
@@ -250,6 +263,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ForgeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/photos': {
+      id: '/photos'
+      path: '/photos'
+      fullPath: '/photos'
+      preLoaderRoute: typeof PhotosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/posts': {
       id: '/posts'
       path: '/posts'
@@ -303,6 +323,7 @@ const rootRouteChildren: RootRouteChildren = {
   ChatRoute: ChatRoute,
   EditorRoute: EditorRoute,
   ForgeRoute: ForgeRoute,
+  PhotosRoute: PhotosRoute,
   PostsRoute: PostsRoute,
   RoadsRoute: RoadsRoute,
   SchematicRoute: SchematicRoute,
