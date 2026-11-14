@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      coin_events: {
+        Row: {
+          action: string
+          actor: string
+          amount: number
+          created_at: string
+          id: string
+          recipient: string
+          source_id: string | null
+        }
+        Insert: {
+          action: string
+          actor: string
+          amount: number
+          created_at?: string
+          id?: string
+          recipient: string
+          source_id?: string | null
+        }
+        Update: {
+          action?: string
+          actor?: string
+          amount?: number
+          created_at?: string
+          id?: string
+          recipient?: string
+          source_id?: string | null
+        }
+        Relationships: []
+      }
       featured_games: {
         Row: {
           created_at: string
@@ -50,6 +80,8 @@ export type Database = {
           created_at: string
           data: Json
           description: string
+          file_name: string | null
+          file_path: string | null
           id: string
           kind: string
           title: string
@@ -63,6 +95,8 @@ export type Database = {
           created_at?: string
           data: Json
           description?: string
+          file_name?: string | null
+          file_path?: string | null
           id?: string
           kind: string
           title: string
@@ -76,6 +110,8 @@ export type Database = {
           created_at?: string
           data?: Json
           description?: string
+          file_name?: string | null
+          file_path?: string | null
           id?: string
           kind?: string
           title?: string
@@ -377,6 +413,10 @@ export type Database = {
       buy_item: { Args: { _item: string }; Returns: number }
       clean_text: { Args: { _t: string }; Returns: string }
       equip_item: { Args: { _item: string; _kind: string }; Returns: undefined }
+      gift_coins: {
+        Args: { _amount: number; _username: string }
+        Returns: number
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -425,6 +465,10 @@ export type Database = {
         }[]
       }
       rank_of: { Args: { _u: string }; Returns: string }
+      record_forge_action: {
+        Args: { _action: string; _post: string }
+        Returns: boolean
+      }
       shop_price: { Args: { _item: string }; Returns: number }
     }
     Enums: {

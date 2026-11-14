@@ -1,4 +1,7 @@
 # BloxdStudio roadmap
+- [ ] Grant CinderHex_YT co-owner and enable staff ULTRACOINS gifts.
+- [ ] Finish private post media and reactions with creator rewards.
+- [ ] Add Forge Create + for code, schematics and texture packs; reward uses/remixes.
 - [x] Add a credit and join link to every script output.
 - [x] Add a Bob photo maker with pose choices and PNG download.
 - [x] Hub home page

@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Glows, SiteHeader } from "@/components/SiteHeader";
+import { CoinGifts } from "@/components/CoinGifts";
 import { UserName } from "@/components/UserName";
 import { useAuth } from "@/hooks/use-auth";
 import { refreshWallet, useWallet } from "@/hooks/use-wallet";
@@ -24,7 +25,7 @@ export const Route = createFileRoute("/shop")({
 });
 
 function Shop() {
-  const { user, profile } = useAuth();
+  const { user, profile, isStaff } = useAuth();
   const { wallet } = useWallet(user?.id);
   const [owned, setOwned] = useState<string[]>([]);
   const loadOwned = async () => {
@@ -62,6 +63,7 @@ function Shop() {
           )}
         </div>
         {!user && <p className="mt-4 text-sm text-steel"><Link to="/auth" className="text-bright underline">Sign in</Link> to earn and spend ULTRACOINS.</p>}
+        {user && isStaff && <CoinGifts />}
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {SHOP.map((it) => {
             const has = owned.includes(it.id);
