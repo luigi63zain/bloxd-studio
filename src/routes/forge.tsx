@@ -13,6 +13,14 @@ import { UserName } from "@/components/UserName";
 import { useAuth } from "@/hooks/use-auth";
 import { Plus } from "lucide-react";
 import { withCodeCredit } from "@/lib/code-credit";
+import { getForgeFileUrl } from "@/lib/files.functions";
+
+async function fetchForgeFile(id: string) {
+  const { url } = await getForgeFileUrl({ data: { id } });
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("File unavailable");
+  return res.blob();
+}
 
 export const Route = createFileRoute("/forge")({
   staticData: { sitemap: true },
@@ -106,8 +114,7 @@ function PostModal({ post, onClose }: { post: Post; onClose: () => void }) {
     setWorking(true);
     try {
       if (post.file_path) {
-        const { data, error } = await supabase.storage.from("forge-files").download(post.file_path);
-        if (error) throw error;
+        const data = await fetchForgeFile(post.id);
         const a = document.createElement("a");
         a.href = URL.createObjectURL(data); a.download = post.file_name ?? `${post.title}.zip`; a.click();
         setTimeout(() => URL.revokeObjectURL(a.href), 1000);
@@ -138,8 +145,8 @@ function PostModal({ post, onClose }: { post: Post; onClose: () => void }) {
         localStorage.setItem("bloxdstudio-schem", JSON.stringify({ name: post.title, vox: fromFile(post.data as unknown as SchemFile) }));
         await record("remix"); await navigate({ to: "/schematic" });
       } else {
-        const { data, error } = post.file_path ? await supabase.storage.from("forge-files").download(post.file_path) : {data: null, error: new Error("No texture file")};
-        if (error || !data) throw error ?? new Error("No texture file");
+        if (!post.file_path) throw new Error("No texture file");
+        const data = await fetchForgeFile(post.id);
         const a = document.createElement("a"); a.href = URL.createObjectURL(data); a.download = post.file_name ?? "textures.zip"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
         await record("remix");
       }

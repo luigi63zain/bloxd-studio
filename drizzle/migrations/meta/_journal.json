@@ -78,6 +78,13 @@
       "when": 1794672208404,
       "tag": "0010_social_forge_rewards",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1794866036711,
+      "tag": "0011_owner_only_storage_reads",
+      "breakpoints": true
     }
   ]
 }
