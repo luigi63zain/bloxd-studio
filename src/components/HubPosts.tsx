@@ -150,6 +150,7 @@ export function HubPosts({ limit = 50, title = "Community posts", showMore = fal
               </div>
               {p.sticker?.pixels && <div className="mt-2"><StickerArt pixels={p.sticker.pixels} size={96} /></div>}
               <div className="mt-2 whitespace-pre-wrap break-words text-sm"><LinkText text={p.body} /></div>
+              {p.media_path && <PostMedia postId={p.id} kind={p.media_type} />}
                {user && <PostReactions postId={p.id} reactions={reactions.filter(r => r.post_id === p.id)} me={user.id} onChange={() => { void load(); refreshWallet(); }} />}
             </div>
           );
