@@ -12,6 +12,8 @@ import { Button } from "@/components/ui/button";
 import { ImagePlus, X } from "lucide-react";
 import { mediaKind } from "@/lib/social-rules";
 import { PostMedia } from "@/components/PostMedia";
+import { PostComments } from "@/components/PostComments";
+import { EmojiPicker } from "@/lib/emojis";
 import { PostReactions, type PostReaction } from "@/components/PostReactions";
 import type { Wallet } from "@/lib/shop";
 
@@ -31,6 +33,7 @@ export function HubPosts({ limit = 50, title = "Community posts", showMore = fal
   const [stickers, setStickers] = useState<MySticker[]>([]);
   const [pick, setPick] = useState<MySticker | null>(null);
   const [picking, setPicking] = useState(false);
+  const [emojiOpen, setEmojiOpen] = useState(false);
 
   const load = async () => {
     if (!user) return;
@@ -118,9 +121,11 @@ export function HubPosts({ limit = 50, title = "Community posts", showMore = fal
             }} />
             <Button variant="outline" onClick={() => fileInput.current?.click()}><ImagePlus />Image / GIF / video</Button>
             <button onClick={() => setPicking(!picking)} className="btn-ghost rounded-xl px-4 py-2 text-sm">🎨 Sticker</button>
+            <button onClick={() => setEmojiOpen(!emojiOpen)} aria-expanded={emojiOpen} className="btn-ghost rounded-xl px-4 py-2 text-sm">😀 Emoji</button>
             <span className="text-[11px] text-steel">Each post earns 5 ULTRACOINS (up to 20 a day).</span>
           </div>
           {media && <div className="mt-3 flex items-center gap-2 text-xs text-steel"><span className="min-w-0 break-all">{media.name}</span><Button variant="ghost" size="icon" aria-label="Remove attachment" onClick={() => setMedia(null)}><X /></Button></div>}
+          {emojiOpen && <div className="mt-2 rounded-xl bg-background/40 p-3 ring-1 ring-border"><EmojiPicker onPick={code => setBody(b => (b ? b + " " : "") + code)} /></div>}
           {picking && (
             <div className="mt-2 flex flex-wrap gap-2 rounded-xl bg-background/40 p-3 ring-1 ring-border">
               {stickers.length === 0 && <span className="text-xs text-steel">No stickers yet. <Link to="/stickers" className="text-bright underline">Make one</Link>.</span>}
@@ -152,6 +157,7 @@ export function HubPosts({ limit = 50, title = "Community posts", showMore = fal
               <div className="mt-2 whitespace-pre-wrap break-words text-sm"><LinkText text={p.body} /></div>
               {p.media_path && <PostMedia postId={p.id} kind={p.media_type} />}
                {user && <PostReactions postId={p.id} reactions={reactions.filter(r => r.post_id === p.id)} me={user.id} onChange={() => { void load(); refreshWallet(); }} />}
+               {user && <PostComments postId={p.id} me={user.id} isStaff={isStaff} />}
             </div>
           );
         })}

@@ -218,6 +218,44 @@ export type Database = {
         }
         Relationships: []
       }
+      post_comments: {
+        Row: {
+          author: string
+          author_rank: string
+          body: string
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          author?: string
+          author_rank?: string
+          body: string
+          created_at?: string
+          id?: string
+          post_id: string
+          user_id?: string
+        }
+        Update: {
+          author?: string
+          author_rank?: string
+          body?: string
+          created_at?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "hub_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       post_reactions: {
         Row: {
           created_at: string

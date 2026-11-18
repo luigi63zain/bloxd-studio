@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { EmojiText } from "@/lib/emojis";
 
 const URL_RE = /(https?:\/\/[^\s<]+)/g;
 
@@ -30,7 +31,7 @@ export function LinkText({ text }: { text: string }) {
   const parts = text.split(URL_RE);
   return (
     <>
-      {parts.map((p, i) => (i % 2 === 1 ? <LinkPreview key={i} url={p} /> : <span key={i}>{p}</span>))}
+      {parts.map((p, i) => (i % 2 === 1 ? <LinkPreview key={i} url={p} /> : <span key={i}><EmojiText text={p} /></span>))}
     </>
   );
 }

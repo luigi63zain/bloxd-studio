@@ -1,10 +1,11 @@
+import { EmojiImg } from "@/lib/emojis";
 import { supabase } from "@/integrations/supabase/client";
 
 export const REACTIONS = [
   { id: "gg", icon: "GG", anim: "react-bounce", label: "GG" },
   { id: "fire", icon: "🔥", anim: "react-flicker", label: "Fire" },
   { id: "diamond", icon: "💎", anim: "react-spin", label: "Diamond" },
-  { id: "creeper", icon: "🟩", anim: "react-shake", label: "Creeper" },
+  { id: "creeper", icon: <EmojiImg code="draugrknight" size={18} />, anim: "react-shake", label: "Draugr Knight" },
   { id: "heart", icon: "❤️", anim: "react-pulse", label: "Heart" },
   { id: "lol", icon: "😂", anim: "react-wobble", label: "LOL" },
 ] as const;
